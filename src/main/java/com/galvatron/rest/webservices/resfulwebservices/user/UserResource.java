@@ -1,8 +1,6 @@
 package com.galvatron.rest.webservices.resfulwebservices.user;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @RestController
@@ -24,5 +22,10 @@ public class UserResource {
     @GetMapping("/getUserByName/{name}")
     public User getUserByName(@PathVariable String name) {
         return service.findUserByName(name);
+    }
+
+    @PostMapping("/create")
+    public User createUser(@RequestBody User user) {
+        return service.saveUser(user);
     }
 }

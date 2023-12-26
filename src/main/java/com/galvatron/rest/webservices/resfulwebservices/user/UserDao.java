@@ -13,11 +13,13 @@ public class UserDao {
 
     private static List<User> userList = new ArrayList<>();
 
+    private static int userCount = 0;
+
     static {
-        userList.add(new User(1, "Galvatron", LocalDate.now().minusYears(20)));
-        userList.add(new User(2, "Megatron", LocalDate.now().minusYears(25)));
-        userList.add(new User(3, "Star Scream", LocalDate.now().minusYears(30)));
-        userList.add(new User(4, "Iron Fist", LocalDate.now().minusYears(35)));
+        userList.add(new User(++userCount, "Galvatron", LocalDate.now().minusYears(20)));
+        userList.add(new User(++userCount, "Megatron", LocalDate.now().minusYears(25)));
+        userList.add(new User(++userCount, "Star Scream", LocalDate.now().minusYears(30)));
+        userList.add(new User(++userCount, "Iron Fist", LocalDate.now().minusYears(35)));
     }
 
     public List<User> getAllUsers() {
@@ -35,4 +37,11 @@ public class UserDao {
         Optional<User> optionalUser = userList.stream().filter(predicate).findFirst();
         return optionalUser.isPresent() ? optionalUser.get() : null;
     }
+
+    public User saveUser(User user) {
+        user.setId(++userCount);
+        userList.add(user);
+        return user;
+    }
+
 }
