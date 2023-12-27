@@ -1,8 +1,12 @@
 package com.galvatron.rest.webservices.resfulwebservices.user;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
+
 @RestController
 public class UserResource {
     private UserDao service;
@@ -10,13 +14,18 @@ public class UserResource {
     public UserResource(UserDao service) {
         this.service = service;
     }
+
     @GetMapping("/getUsers")
     public List<User> getUsers() {
         return service.getAllUsers();
     }
+
     @GetMapping("/getUserById/{id}")
     public User getUserById(@PathVariable int id) {
-        return service.findUserById(id);
+        User user = service.findUserById(id);
+        if (user == null)
+            throw new UserNotFoundException("id" + id);
+        return user;
     }
 
     @GetMapping("/getUserByName/{name}")
@@ -25,7 +34,13 @@ public class UserResource {
     }
 
     @PostMapping("/create")
-    public User createUser(@RequestBody User user) {
-        return service.saveUser(user);
+    public ResponseEntity<Object> createUser(@RequestBody User user) {
+        User createdUser = service.saveUser(user);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdUser.getId())
+                .toUri();
+        return ResponseEntity.created(location).build();
+//        return service.saveUser(user);
     }
 }

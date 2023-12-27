@@ -29,13 +29,12 @@ public class UserDao {
     public User findUserById(int id) {
         Predicate<? super User> predicate = user -> user.getId().equals(id);
         Optional<User> optionalUser = userList.stream().filter(predicate).findFirst();
-        return optionalUser.isPresent() ? optionalUser.get() : null;
+        return optionalUser.isPresent() ? optionalUser.get() : null; // Approach 1
     }
 
     public User findUserByName(String name) {
         Predicate<? super User> predicate = user -> user.getName().equalsIgnoreCase(name);
-        Optional<User> optionalUser = userList.stream().filter(predicate).findFirst();
-        return optionalUser.isPresent() ? optionalUser.get() : null;
+        return userList.stream().filter(predicate).findFirst().orElse(null); // Approach 2
     }
 
     public User saveUser(User user) {
