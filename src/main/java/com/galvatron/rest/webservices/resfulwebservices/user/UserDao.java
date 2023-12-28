@@ -43,4 +43,14 @@ public class UserDao {
         return user;
     }
 
+    public void removeUserById(int id) {
+        Predicate<? super User> predicate = user -> user.getId().equals(id);
+        userList.removeIf(predicate);
+    }
+
+    public void removeUserByName(String name) {
+        Predicate<? super User> predicate = user -> user.getName().equals(name);
+        userList.removeIf(predicate);
+    }
+
 }
